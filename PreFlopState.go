@@ -14,12 +14,14 @@ func (p *PreFlopState) DealCards() {
 }
 
 func (p *PreFlopState) TakeActions() {
-    betPlaced := false
+    currentBet := 0.0
     for i := range p.game.players {
         player := &p.game.players[i]
-        playerAction := GetPlayerAction(betPlaced)
-        fmt.Println(player)
-        fmt.Println(playerAction)
+        playerAction, betSize := GetPlayerAction(currentBet, i, player.stack)
+        currentBet = betSize
+        player.TakeAction(playerAction, betSize)
+        fmt.Println("Current bet is:", betSize)
+        fmt.Println("Player:", *player)
     }
 }
 
