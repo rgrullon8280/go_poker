@@ -7,8 +7,15 @@ import (
 type GameState interface {
     DealCards()
     TakeActions()
-    NextState()
+    NextState() GameState
 }
+
+type CardRound int
+const (
+    Flop CardRound = iota
+    Turn
+    River
+)
 
 
 
@@ -60,10 +67,13 @@ func GetPlayerAction(betSize float64, playerPosition int, playerStack float64) (
                 fmt.Println("Bet size must be positive, pelase try again")
             } else if b > playerStack {
                 fmt.Println("Bet size must be less than stack, pelase try again")
+            } else if i == Raise && b < betSize{
+                fmt.Println("You must raise at least the size of the last bet")
             } else {
                 validBet = true
             }
         }
     } else if i == Call {b = betSize}
+    if i == Raise { b = b + betSize}
     return i, b
 }
